@@ -36,6 +36,9 @@ def filename_to_sqlite_date(filename: str) -> str:
     day, month, year = name.split("_")
     return f"{year}-{month}-{day}"
 
+def text_to_hex(text: str) -> str:
+    return hex(ord(text))[2:]
+
 def parse_file_to_database(file_path: pathlib.Path, c: sqlite3.Cursor):
     with open(file_path, 'r') as f:
         data = json.load(f)
@@ -44,12 +47,17 @@ def parse_file_to_database(file_path: pathlib.Path, c: sqlite3.Cursor):
     day_id = c.lastrowid
 
     for item in data['day_attributes']:
-        c.execute('INSERT INTO day_attributes (day_id, class, text) VALUES (?, ?, ?)', (day_id, item['class'], item['text']))
+        c.execute('INSERT INTO day_attributes (day_id, class, text) VALUES (?, ?, ?)', (day_id, item['class'], text_to_hex(item['text'])))
 
     for type, values in data['good_bad_attributes'].items():
         type_bool = type == "good"
         for value in values:
             c.execute('INSERT INTO attribute (day_id, type, value) VALUES (?, ?, ?)', (day_id, type_bool, value))
+
+def save_all_files_to_sql(c: sqlite3.Cursor):
+    for file_path in pathlib.Path("./results").glob("*.json"):
+        parse_file_to_database(file_path, c)
+
 
 def main():
     conn = sqlite3.connect('chinese_calendar.db')
