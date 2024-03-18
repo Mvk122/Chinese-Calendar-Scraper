@@ -7,7 +7,10 @@ def get_image_names_from_result_files() -> tuple[set[str], set[str]]:
     good_attributes = set()
     bad_attributes = set()
 
+    limit = 0
     for file in pathlib.Path('./results').iterdir():
+        if limit == 1000:
+            break
         if file.is_file():
             with open(file, 'r') as f:
                 data = json.load(f)
@@ -15,6 +18,7 @@ def get_image_names_from_result_files() -> tuple[set[str], set[str]]:
                     good_attributes.add(attribute)
                 for attribute in data['good_bad_attributes']["bad"]:
                     bad_attributes.add(attribute)
+        limit += 1
     return good_attributes, bad_attributes
 
 

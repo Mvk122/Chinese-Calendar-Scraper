@@ -96,7 +96,7 @@ async def fast_scrape_to_json(start_date: date, end_date: date, max_concurrent_r
 
 async def main(): 
     # await scrape_to_json(date(1900, 1, 1), date(2100, 12, 31), 50)
-    await fast_scrape_to_json(date(1900, 1, 1), date(2100, 1, 1), 50)
+    await fast_scrape_to_json(date(1946, 12, 31), date(2100, 1, 1), 50)
 
 if __name__ == "__main__":
     asyncio.run(main())
