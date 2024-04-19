@@ -46,9 +46,9 @@ def get_calendar_information_from_soup(soup: BeautifulSoup) -> dict[str, Any]:
 
     return result
 
-def store_calendar_information_to_json(calendar_information: dict[str, Any], date: date) -> None:
-    with open(f"./results/{date.day}_{date.month}_{date.year}.json", 'w+') as f:
-        json.dump(calendar_information, f, indent=4)
+def store_calendar_information_to_json(calendar_information: dict[str, Any], date: date, folder="results") -> None:
+    with open(f"./{folder}/{date.day}_{date.month}_{date.year}.json", 'w+', encoding='utf8') as f:
+        json.dump(calendar_information, f, ensure_ascii=False)
 
 
 def get_url_iter(start_date: date, end_date: date):
